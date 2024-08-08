@@ -16,7 +16,12 @@ const COMMON_PROVIDERS: Provider[] = [
     useFactory: (): DatasourceLogger =>
       new DatasourceLogger(new Logger('Postgres')),
   },
-  DatasourceFactory,
+  {
+    provide: DatasourceFactory,
+    useFactory: (logger: DatasourceLogger): DatasourceFactory =>
+      new DatasourceFactory(logger),
+    inject: [DatasourceLogger],
+  },
   {
     provide: DatasourceRegistry,
     useFactory: async (
